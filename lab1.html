@@ -3,288 +3,344 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Научный отчет: Моделирование начисления процентов | Лабораторная №1</title>
+    <title>Презентация-программа: Процентные расчеты</title>
     
-    <!-- Шрифты и библиотеки -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&family=Fira+Code&display=swap" rel="stylesheet">
-    <!-- MathJax для формул -->
+    <!-- Библиотеки -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <!-- Chart.js для графиков -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Fira+Code&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --paper-bg: #ffffff;
-            --text-color: #1a1a1a;
-            --accent-color: #004225; /* Темно-зеленый "банковский" цвет */
-            --border-color: #d1d5db;
+            --primary: #2563eb;
+            --dark: #0f172a;
+            --accent: #10b981;
+            --bg: #f1f5f9;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-            color: var(--text-color);
-            line-height: 1.7;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
             margin: 0;
-            padding: 40px 10px;
+            scroll-behavior: smooth;
         }
 
-        .paper {
-            max-width: 900px;
-            margin: 0 auto;
-            background: var(--paper-bg);
-            padding: 60px 80px;
-            box-shadow: 0 0 40px rgba(0,0,0,0.1);
-            border-radius: 4px;
-        }
-
-        /* Оформление заголовка как в дипломе */
-        .academic-header {
-            text-align: center;
-            border-bottom: 3px double var(--text-color);
-            margin-bottom: 50px;
-            padding-bottom: 20px;
-        }
-
-        .academic-header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            margin: 10px 0;
-            text-transform: uppercase;
-        }
-
-        .student-info {
+        /* Навигация сверху */
+        .nav-bar {
+            position: fixed;
+            top: 0; width: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
             display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            text-align: left;
-            border-top: 1px solid #eee;
-            padding-top: 15px;
+            justify-content: center;
+            padding: 15px 0;
+            z-index: 1000;
         }
-
-        section { margin-bottom: 40px; }
-        
-        h2 {
-            font-family: 'Playfair Display', serif;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-
-        .formula-box {
-            background: #f9fafb;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            margin: 20px 0;
-            border: 1px solid #eee;
-        }
-
-        /* Стилизация кода */
-        .code-block {
-            background: #282c34;
-            color: #abb2bf;
-            padding: 25px;
-            border-radius: 8px;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
-            position: relative;
-            overflow-x: auto;
-        }
-
-        /* График */
-        .chart-container {
-            margin: 30px 0;
-            padding: 20px;
-            background: #fff;
-            border: 1px solid #eee;
-            border-radius: 12px;
-        }
-
-        /* Интерактивый блок */
-        .interactive-panel {
-            background: #f0f7f4;
-            padding: 30px;
-            border-radius: 12px;
-            margin: 40px 0;
-            border-left: 5px solid var(--accent-color);
-        }
-
-        input {
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            margin: 5px;
-            width: 120px;
-        }
-
-        .btn-back {
+        .nav-bar a {
+            color: white;
             text-decoration: none;
-            color: var(--accent-color);
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 20px;
+            margin: 0 15px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+            transition: 0.3s;
+        }
+        .nav-bar a:hover { opacity: 1; color: var(--accent); }
+
+        /* Секции-слайды */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 20px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        @media print {
-            body { background: white; padding: 0; }
-            .paper { box-shadow: none; width: 100%; max-width: 100%; padding: 0; }
-            .btn-back, .interactive-panel { display: none; }
+        .slide-content {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            padding: 50px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+        }
+
+        /* Заголовок слайда 1 */
+        .hero-title {
+            text-align: center;
+        }
+        .hero-title h1 { font-size: 3.5rem; color: var(--dark); margin: 0; }
+        .hero-title p { font-size: 1.5rem; color: var(--primary); font-weight: bold; }
+
+        /* Оформление кода */
+        .code-container {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 30px;
+            border-radius: 15px;
+            font-family: 'Fira Code', monospace;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .code-container::before {
+            content: "Python 3.10";
+            position: absolute;
+            top: -10px; right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 2px 12px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+        }
+
+        /* Калькулятор */
+        .interactive-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        .controls {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+        }
+        .controls label { font-size: 0.8rem; font-weight: bold; color: var(--secondary); display: block; margin-top: 15px; }
+        .controls input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+        .controls input:focus { border-color: var(--primary); }
+
+        .result-card {
+            background: var(--dark);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .val { font-size: 1.8rem; color: var(--accent); font-weight: bold; }
+
+        .back-home {
+            position: fixed;
+            bottom: 20px; right: 20px;
+            background: var(--primary);
+            color: white;
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4);
+            z-index: 100;
+        }
+
+        @media (max-width: 768px) {
+            .interactive-grid { grid-template-columns: 1fr; }
+            .hero-title h1 { font-size: 2rem; }
+            .slide-content { padding: 20px; }
         }
     </style>
 </head>
 <body>
 
-<div class="container" style="max-width: 900px; margin: 0 auto;">
-    <a href="index.html" class="btn-back">← ВЕРНУТЬСЯ К РЕЕСТРУ РАБОТ</a>
-    
-    <div class="paper">
-        <div class="academic-header">
-            <p>МИНИСТЕРСТВО ОБРАЗОВАНИЯ И НАУКИ</p>
-            <h1>ОТЧЕТ ПО ЛАБОРАТОРНОЙ РАБОТЕ №1</h1>
-            <p>Дисциплина: Программирование кредитных отношений и банковское дело</p>
+    <div class="nav-bar">
+        <a href="#intro">Начало</a>
+        <a href="#math">Математика</a>
+        <a href="#code">Код Python</a>
+        <a href="#sim">Симулятор</a>
+        <a href="#summary">Вывод</a>
+    </div>
+
+    <!-- СЛАЙД 1: ТИТУЛЬНЫЙ -->
+    <section id="intro">
+        <div class="hero-title">
+            <p>Лабораторная работа №1</p>
+            <h1>Расчет процентов:<br>от формул к коду</h1>
+            <div style="margin-top: 40px; font-weight: bold; color: #64748b;">
+                Студент: jakemonmercer-spec | Группа: ИСТ-2-22
+            </div>
+            <div style="margin-top: 20px;">
+                <span style="background: #dcfce7; color: #166534; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem;">Python Based</span>
+                <span style="background: #dbeafe; color: #1e40af; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; margin-left: 10px;">Banking Tech</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- СЛАЙД 2: МАТЕМАТИКА -->
+    <section id="math">
+        <div class="slide-content">
+            <h2>01. Математический аппарат</h2>
+            <p>В основе банковских продуктов лежат две фундаментальные модели. Программирование позволяет реализовать их с неограниченной точностью.</p>
             
-            <div class="student-info">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 30px;">
                 <div>
-                    <strong>Выполнил:</strong> студент jakemonmercer-spec<br>
-                    <strong>Группа:</strong> ИСТ-2-22
+                    <h3>Простой процент</h3>
+                    <p>Доход начисляется только на тело вклада.</p>
+                    <div style="font-size: 1.5rem; background: #f8fafc; padding: 20px; border-radius: 10px;">
+                        \[S = P(1 + ni)\]
+                    </div>
                 </div>
                 <div>
-                    <strong>Проверил:</strong> Старший преподаватель<br>
-                    <strong>Дата:</strong> 2024 г.
+                    <h3>Сложный процент</h3>
+                    <p>Проценты на проценты (капитализация).</p>
+                    <div style="font-size: 1.5rem; background: #f8fafc; padding: 20px; border-radius: 10px;">
+                        \[S = P(1 + i)^n\]
+                    </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <section>
-            <h2>Аннотация</h2>
-            <p>В данной работе исследуется математический аппарат начисления процентов в банковской сфере. Целью работы является программная реализация алгоритмов расчета простых и сложных процентов на языке Python, а также сравнительный анализ их эффективности при долгосрочном инвестировании.</p>
-        </section>
+    <!-- СЛАЙД 3: PYTHON КОД -->
+    <section id="code" style="background: #0f172a; color: white;">
+        <div class="slide-content" style="background: transparent;">
+            <h2 style="color: white; border-bottom: 2px solid var(--primary); padding-bottom: 10px;">02. Реализация на Python</h2>
+            <p style="color: #94a3b8;">Использование объектно-ориентированного подхода для описания финансовых функций.</p>
+            
+            <div class="code-container">
+<pre style="margin: 0;">
+<span style="color: #569cd6;">class</span> <span style="color: #4ec9b0;">FinancialModel</span>:
+    <span style="color: #569cd6;">def</span> <span style="color: #dcdcaa;">__init__</span>(self, principal, rate, time):
+        self.p = principal
+        self.r = rate / <span style="color: #b5cea8;">100</span>
+        self.t = time
 
-        <section>
-            <h2>1. Математическая модель</h2>
-            <p>Для расчета простых процентов используется линейная модель:</p>
-            <div class="formula-box">
-                \[S = P(1 + i \cdot n)\]
-            </div>
-            <p>Для расчета сложных процентов (капитализация) применяется экспоненциальная модель:</p>
-            <div class="formula-box">
-                \[S = P \left(1 + \frac{i}{m}\right)^{m \cdot n}\]
-            </div>
-            <p>Где \(P\) — начальная сумма, \(i\) — годовая ставка, \(n\) — срок в годах, \(m\) — количество периодов капитализации в год.</p>
-        </section>
+    <span style="color: #569cd6;">def</span> <span style="color: #dcdcaa;">get_simple</span>(self):
+        <span style="color: #569cd6;">return</span> self.p * (<span style="color: #b5cea8;">1</span> + self.r * self.t)
 
-        <section>
-            <h2>2. Программная реализация (Python)</h2>
-            <div class="code-block">
-<pre>
-import math
+    <span style="color: #569cd6;">def</span> <span style="color: #dcdcaa;">get_compound</span>(self, m=<span style="color: #b5cea8;">12</span>):
+        <span style="color: #569cd6;">return</span> self.p * (<span style="color: #b5cea8;">1</span> + self.r/m)**(m * self.t)
 
-def calculate_finance(p, r, t, m=12):
-    """
-    p - principal (сумма)
-    r - annual rate (ставка в %)
-    t - time in years (срок)
-    m - compound periods (периоды капитализации)
-    """
-    # Расчет простых процентов
-    simple = p * (1 + (r/100) * t)
-    
-    # Расчет сложных процентов
-    compound = p * math.pow((1 + (r/100)/m), (m * t))
-    
-    return round(simple, 2), round(compound, 2)
+<span style="color: #6a9955;"># Расчет для суммы 100,000 под 15% на 5 лет</span>
+model = FinancialModel(<span style="color: #b5cea8;">100000</span>, <span style="color: #b5cea8;">15</span>, <span style="color: #b5cea8;">5</span>)
+<span style="color: #dcdcaa;">print</span>(model.get_compound())
 </pre>
             </div>
-        </section>
-
-        <section>
-            <h2>3. Визуализация и динамический анализ</h2>
-            <div class="interactive-panel">
-                <strong>Параметры моделирования:</strong><br><br>
-                Сумма: <input type="number" id="p" value="100000" oninput="updateChart()"> 
-                Ставка (%): <input type="number" id="r" value="15" oninput="updateChart()"> 
-                Срок (лет): <input type="number" id="t" value="10" oninput="updateChart()">
-            </div>
-
-            <div class="chart-container">
-                <canvas id="financeChart"></canvas>
-            </div>
-        </section>
-
-        <section>
-            <h2>4. Заключение</h2>
-            <p>На основе проведенных расчетов выявлено, что при сроке инвестирования более 3-х лет эффект капитализации (сложные проценты) приводит к существенному отрыву доходности от простых процентов. В банковских продуктах использование Python позволяет создавать гибкие модели для расчета аннуитетных и дифференцированных платежей с высокой точностью.</p>
-        </section>
-
-        <div style="text-align: center; margin-top: 100px; font-size: 0.8rem; border-top: 1px solid #eee;">
-            Электронная подпись документа: #ID-JAKEMON-2024-SPEC
         </div>
-    </div>
-</div>
+    </section>
 
-<script>
-let myChart;
+    <!-- СЛАЙД 4: СИМУЛЯТОР -->
+    <section id="sim">
+        <div class="slide-content">
+            <h2>03. Интерактивная программа</h2>
+            <p>Меняйте параметры, чтобы увидеть мощь экспоненциального роста в реальном времени.</p>
+            
+            <div class="interactive-grid">
+                <div class="controls">
+                    <div class="input-group">
+                        <label>Начальный капитал (₽)</label>
+                        <input type="number" id="p" value="100000" oninput="updateAll()">
+                    </div>
+                    <div class="input-group">
+                        <label>Годовая ставка (%)</label>
+                        <input type="number" id="r" value="15" oninput="updateAll()">
+                    </div>
+                    <div class="input-group">
+                        <label>Срок (лет)</label>
+                        <input type="number" id="t" value="10" oninput="updateAll()">
+                    </div>
 
-function updateChart() {
-    const p = parseFloat(document.getElementById('p').value) || 0;
-    const r = parseFloat(document.getElementById('r').value) || 0;
-    const t = parseInt(document.getElementById('t').value) || 0;
-    
-    let labels = [];
-    let simpleData = [];
-    let compoundData = [];
+                    <div class="result-card">
+                        <div class="res-label">Через 10 лет вы получите:</div>
+                        <div class="val" id="totalVal">444 021 ₽</div>
+                    </div>
+                </div>
+                
+                <div class="chart-area">
+                    <canvas id="mainChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    for (let i = 0; i <= t; i++) {
-        labels.push('Год ' + i);
-        simpleData.push(p * (1 + (r/100) * i));
-        compoundData.push(p * Math.pow((1 + (r/100)/12), (12 * i)));
-    }
+    <!-- СЛАЙД 5: ВЫВОД -->
+    <section id="summary">
+        <div class="slide-content" style="text-align: center;">
+            <h2>Итоги исследования</h2>
+            <p style="font-size: 1.2rem; max-width: 700px; margin: 0 auto;">
+                Автоматизация расчетов на Python позволяет банкам мгновенно обрабатывать миллионы транзакций. 
+                Проведенное моделирование доказало, что на длительных периодах (от 5 лет) 
+                <strong>сложный процент</strong> является единственно эффективным инструментом накопления капитала.
+            </p>
+            <div style="margin-top: 50px;">
+                <a href="index.html" style="background: var(--dark); color: white; padding: 15px 30px; border-radius: 10px; text-decoration: none; font-weight: bold;">
+                    ЗАВЕРШИТЬ ПРОСМОТР
+                </a>
+            </div>
+        </div>
+    </section>
 
-    if (myChart) { myChart.destroy(); }
+    <a href="index.html" class="back-home">🏠</a>
 
-    const ctx = document.getElementById('financeChart').getContext('2d');
-    myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Сложные проценты',
-                    data: compoundData,
-                    borderColor: '#10b981',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    fill: true,
-                    tension: 0.4
-                },
-                {
-                    label: 'Простые проценты',
-                    data: simpleData,
-                    borderColor: '#ef4444',
-                    borderDash: [5, 5],
-                    fill: false,
-                    tension: 0
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                title: { display: true, text: 'Сравнение динамики роста капитала' }
-            },
-            scales: {
-                y: { beginAtZero: false, title: { display: true, text: 'Сумма (₽)' } }
+    <script>
+        let chart;
+
+        function updateAll() {
+            const p = parseFloat(document.getElementById('p').value) || 0;
+            const r = parseFloat(document.getElementById('r').value) || 0;
+            const t = parseInt(document.getElementById('t').value) || 0;
+
+            const labels = [];
+            const simpleData = [];
+            const compoundData = [];
+
+            for (let i = 0; i <= t; i++) {
+                labels.push('Год ' + i);
+                simpleData.push(p * (1 + (r/100) * i));
+                compoundData.push(p * Math.pow((1 + (r/100)/12), (12 * i)));
             }
+
+            // Обновляем текст результата
+            const final = compoundData[compoundData.length - 1];
+            document.getElementById('totalVal').innerText = Math.round(final).toLocaleString() + ' ₽';
+
+            // Обновляем график
+            if (chart) chart.destroy();
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Сложный %',
+                            data: compoundData,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            fill: true,
+                            pointRadius: 5
+                        },
+                        {
+                            label: 'Простой %',
+                            data: simpleData,
+                            borderColor: '#ef4444',
+                            borderDash: [5, 5],
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
         }
-    });
-}
 
-// Инициализация при загрузке
-window.onload = updateChart;
-</script>
-
+        window.onload = updateAll;
+    </script>
 </body>
 </html>
