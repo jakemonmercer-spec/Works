@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои отчеты по домашним заданиям</title>
+    <!-- Подключаем современный шрифт и иконки -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --primary-color: #2563eb;
+            --text-color: #1e293b;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        h1 { font-size: 2rem; font-weight: 600; margin-bottom: 10px; }
+        p { color: #64748b; }
+
+        /* Сетка для заданий */
+        #homework-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            list-style: none;
+            padding: 0;
+        }
+        .hw-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e2e8f0;
+        }
+        .hw-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            border-color: var(--primary-color);
+        }
+        .hw-card .title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+        .hw-card .type {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .loading { text-align: center; font-style: italic; color: #64748b; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>📚 Портфолио студента</h1>
+        <p>Список выполненных домашних работ</p>
+    </header>
+
+    <div id="loading" class="loading">Загрузка заданий...</div>
+    <ul id="homework-list"></ul>
+</div>
+
+<script>
+    // === НАСТРОЙКИ ===
+    const USERNAME = 'ТВОЙ_ЛОГИН_НА_GITHUB'; // Замени на свой логин
+    const REPO = 'НАЗВАНИЕ_РЕПОЗИТОРИЯ';    // Замени на название репозитория
+    // =================
+
+    async function fetchHomeworks() {
+        const url = `https://api.github.com/repos/${USERNAME}/${REPO}/contents/`;
+        const listElement = document.getElementById('homework-list');
+        const loadingElement = document.getElementById('loading');
+
+        try {
+            const response = await fetch(url);
+            const files = await response.json();
+
+            loadingElement.style.display = 'none';
+
+            // Фильтруем файлы: ищем те, что заканчиваются на .html и не являются index.html
+            const homeworks = files.filter(file => 
+                file.name.endsWith('.html') && 
+                file.name !== 'index.html'
+            );
+
+            if (homeworks.length === 0) {
+                listElement.innerHTML = "<p>Пока заданий нет. Добавь файлы homework1.html и т.д.</p>";
+                return;
+            }
+
+            // Сортируем по имени (чтобы homework1 был выше homework10)
+            homeworks.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true}));
+
+            homeworks.forEach(hw => {
+                const card = document.createElement('a');
+                card.className = 'hw-card';
+                card.href = hw.name; // Ссылка на сам файл
+
+                // Красивое название: убираем .html и заменяем дефисы на пробелы
+                const displayName = hw.name.replace('.html', '').replace(/-/g, ' ');
+
+                card.innerHTML = `
+                    <span class="type">Задание</span>
+                    <span class="title">${displayName}</span>
+                `;
+                listElement.appendChild(card);
+            });
+
+        } catch (error) {
+            console.error('Ошибка при загрузке данных:', error);
+            loadingElement.innerText = 'Не удалось загрузить список файлов. Проверьте настройки API.';
+        }
+    }
+
+    fetchHomeworks();
+</script>
+
+</body>
+</html>
