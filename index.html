@@ -90,7 +90,6 @@
 <script>
     const USERNAME = 'jakemonmercer-spec'; 
     const REPO = 'jakemonmercer-spec.github.io'; 
-    // =================
 
     async function fetchHomeworks() {
         const url = `https://api.github.com/repos/${USERNAME}/${REPO}/contents/`;
@@ -98,43 +97,52 @@
         const loadingElement = document.getElementById('loading');
 
         try {
+            console.log("Запрашиваю список файлов...");
             const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error(`Ошибка API: ${response.status}`);
+            }
+
             const files = await response.json();
+            console.log("Файлы получены:", files);
 
             loadingElement.style.display = 'none';
 
-            // Фильтруем файлы: ищем те, что заканчиваются на .html и не являются index.html
+            // Фильтруем (любой регистр расширения)
             const homeworks = files.filter(file => 
-                file.name.endsWith('.html') && 
-                file.name !== 'index.html'
+                file.name.toLowerCase().endsWith('.html') && 
+                file.name.toLowerCase() !== 'index.html'
             );
 
             if (homeworks.length === 0) {
-                listElement.innerHTML = "<p>Пока заданий нет. Добавь файлы homework1.html и т.д.</p>";
+                listElement.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; color: #64748b;">
+                        <p>В репозитории пока нет .html файлов (кроме index.html).</p>
+                        <p style="font-size: 0.8rem;">Проверьте, что файлы лежат в корневой папке.</p>
+                    </div>`;
                 return;
             }
 
-            // Сортируем по имени (чтобы homework1 был выше homework10)
             homeworks.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true}));
 
             homeworks.forEach(hw => {
                 const card = document.createElement('a');
                 card.className = 'hw-card';
-                card.href = hw.name; // Ссылка на сам файл
+                card.href = hw.name;
 
-                // Красивое название: убираем .html и заменяем дефисы на пробелы
-                const displayName = hw.name.replace('.html', '').replace(/-/g, ' ');
+                const displayName = hw.name.replace(/\.[^/.]+$/, "").replace(/-/g, ' ');
 
                 card.innerHTML = `
-                    <span class="type">Задание</span>
+                    <span class="type">Документ</span>
                     <span class="title">${displayName}</span>
                 `;
                 listElement.appendChild(card);
             });
 
         } catch (error) {
-            console.error('Ошибка при загрузке данных:', error);
-            loadingElement.innerText = 'Не удалось загрузить список файлов. Проверьте настройки API.';
+            console.error('Подробная ошибка:', error);
+            loadingElement.innerHTML = `<span style="color: red;">Ошибка: ${error.message}</span>`;
         }
     }
 
