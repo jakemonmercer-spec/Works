@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторная работа №1 - Расчет процентов</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --code-bg: #1e1e1e;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        
+        header { border-bottom: 2px solid #e2e8f0; margin-bottom: 30px; padding-bottom: 20px; }
+        .back-link { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 0.9rem; }
+        h1 { color: var(--text); margin-top: 10px; }
+        
+        .badge { background: #dbeafe; color: #1e40af; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        
+        h2 { border-left: 4px solid var(--primary); padding-left: 15px; margin-top: 30px; font-size: 1.3rem; }
+        
+        /* Стили для кода */
+        pre {
+            background: var(--code-bg);
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .keyword { color: #569cd6; }
+        .func { color: #dcdcaa; }
+        .comment { color: #6a9955; }
+        .string { color: #ce9178; }
+
+        /* Таблица */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { padding: 12px; border: 1px solid #e2e8f0; text-align: left; }
+        th { background: #f1f5f9; }
+        .highlight { font-weight: bold; color: var(--primary); }
+
+        .footer { margin-top: 50px; font-size: 0.9rem; color: #64748b; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-link">← Назад к списку работ</a>
+    
+    <header>
+        <span class="badge">Лабораторная работа №1</span>
+        <h1>Программирование расчета простых и сложных процентов</h1>
+        <p><strong>Дисциплина:</strong> Программирование кредитных отношений и банковское дело</p>
+    </header>
+
+    <section>
+        <h2>1. Теоретическая база</h2>
+        <p>В рамках работы реализованы два базовых метода начисления процентов, используемых в банковских продуктах:</p>
+        <ul>
+            <li><strong>Простые проценты:</strong> Начисляются только на основную сумму вклада.</li>
+            <li><strong>Сложные проценты:</strong> Начисляются на основную сумму плюс накопленные за предыдущие периоды проценты (капитализация).</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>2. Реализация на Python</h2>
+        <p>В отличие от стандартного использования Excel, реализация на Python позволяет автоматизировать массовые расчеты и легко интегрировать их в банковские системы.</p>
+        
+<pre>
+<span class="keyword">def</span> <span class="func">simple_interest</span>(p, r, t):
+    <span class="comment"># P - сумма, R - ставка (%), T - срок (лет)</span>
+    <span class="keyword">return</span> p * (1 + (r / 100) * t)
+
+<span class="keyword">def</span> <span class="func">compound_interest</span>(p, r, t, n=12):
+    <span class="comment"># n - количество периодов капитализации в год (по умолчанию 12)</span>
+    <span class="keyword">return</span> p * (1 + (r / 100) / n)**(n * t)
+
+<span class="comment"># Пример расчета</span>
+principal = 100000  <span class="comment"># 100 000 руб.</span>
+rate = 15           <span class="comment"># 15% годовых</span>
+years = 5           <span class="comment"># на 5 лет</span>
+
+print(<span class="string">f"Простые: {simple_interest(principal, rate, years)}"</span>)
+print(<span class="string">f"Сложные: {compound_interest(principal, rate, years)}"</span>)
+</pre>
+    </section>
+
+    <section>
+        <h2>3. Сравнение схем начисления</h2>
+        <p>Ниже представлено сравнение доходности при вкладе <strong>100 000 ₽</strong> под <strong>15% годовых</strong>:</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Срок (лет)</th>
+                    <th>Простые проценты</th>
+                    <th>Сложные (ежемес. кап.)</th>
+                    <th>Разница</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1 год</td>
+                    <td>115 000 ₽</td>
+                    <td>116 075 ₽</td>
+                    <td>1 075 ₽</td>
+                </tr>
+                <tr>
+                    <td>3 года</td>
+                    <td>145 000 ₽</td>
+                    <td>156 394 ₽</td>
+                    <td>11 394 ₽</td>
+                </tr>
+                <tr>
+                    <td>5 лет</td>
+                    <td>175 000 ₽</td>
+                    <td><span class="highlight">210 718 ₽</span></td>
+                    <td><span class="highlight">35 718 ₽</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>4. Вывод</h2>
+        <p>Использование Python для расчетов в банковской сфере дает преимущество в точности и гибкости. Сложные проценты значительно выгоднее для долгосрочных вкладов, что наглядно демонстрирует расчет: за 5 лет разница в доходности составила более 35% от первоначальной суммы.</p>
+    </section>
+
+    <div class="footer">
+        Выполнил студент: [Твое Имя] | 2023
+    </div>
+</div>
+
+</body>
+</html>
