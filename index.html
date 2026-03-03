@@ -3,287 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Научный отчет: Моделирование начисления процентов | Лабораторная №1</title>
+    <title>Портфолио | Программирование кредитных отношений</title>
     
-    <!-- Шрифты и библиотеки -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&family=Fira+Code&display=swap" rel="stylesheet">
-    <!-- MathJax для формул -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <!-- Chart.js для графиков -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+    <!-- Подключаем шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --paper-bg: #ffffff;
-            --text-color: #1a1a1a;
-            --accent-color: #004225; /* Темно-зеленый "банковский" цвет */
-            --border-color: #d1d5db;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
         }
+
+        * { box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-            color: var(--text-color);
-            line-height: 1.7;
+            background-color: var(--bg);
+            color: var(--text-main);
             margin: 0;
-            padding: 40px 10px;
+            padding: 0;
+            line-height: 1.5;
         }
 
-        .paper {
-            max-width: 900px;
+        .container {
+            max-width: 1000px;
             margin: 0 auto;
-            background: var(--paper-bg);
-            padding: 60px 80px;
-            box-shadow: 0 0 40px rgba(0,0,0,0.1);
-            border-radius: 4px;
+            padding: 60px 20px;
         }
 
-        /* Оформление заголовка как в дипломе */
-        .academic-header {
+        header {
             text-align: center;
-            border-bottom: 3px double var(--text-color);
-            margin-bottom: 50px;
-            padding-bottom: 20px;
+            margin-bottom: 60px;
         }
 
-        .academic-header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            margin: 10px 0;
-            text-transform: uppercase;
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
         }
 
-        .student-info {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            text-align: left;
-            border-top: 1px solid #eee;
-            padding-top: 15px;
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
         }
 
-        section { margin-bottom: 40px; }
-        
-        h2 {
-            font-family: 'Playfair Display', serif;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
+        /* Сетка карточек */
+        #homework-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            list-style: none;
+            padding: 0;
         }
 
-        .formula-box {
-            background: #f9fafb;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            margin: 20px 0;
-            border: 1px solid #eee;
-        }
-
-        /* Стилизация кода */
-        .code-block {
-            background: #282c34;
-            color: #abb2bf;
-            padding: 25px;
-            border-radius: 8px;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
-            position: relative;
-            overflow-x: auto;
-        }
-
-        /* График */
-        .chart-container {
-            margin: 30px 0;
-            padding: 20px;
-            background: #fff;
-            border: 1px solid #eee;
-            border-radius: 12px;
-        }
-
-        /* Интерактивый блок */
-        .interactive-panel {
-            background: #f0f7f4;
-            padding: 30px;
-            border-radius: 12px;
-            margin: 40px 0;
-            border-left: 5px solid var(--accent-color);
-        }
-
-        input {
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            margin: 5px;
-            width: 120px;
-        }
-
-        .btn-back {
+        .hw-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
             text-decoration: none;
-            color: var(--accent-color);
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 20px;
+            color: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
         }
 
-        @media print {
-            body { background: white; padding: 0; }
-            .paper { box-shadow: none; width: 100%; max-width: 100%; padding: 0; }
-            .btn-back, .interactive-panel { display: none; }
+        .hw-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
+
+        .hw-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--primary);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .hw-card:hover::before {
+            opacity: 1;
+        }
+
+        .hw-card .type {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .hw-card .title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+
+        .hw-card .status {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+        }
+
+        .hw-card .status::before {
+            content: '→';
+            margin-right: 8px;
+            transition: transform 0.3s;
+        }
+
+        .hw-card:hover .status::before {
+            transform: translateX(4px);
+        }
+
+        /* Состояния загрузки и ошибок */
+        .loading, .error, .empty {
+            text-align: center;
+            padding: 40px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px dashed var(--border);
+            grid-column: 1 / -1;
+        }
+
+        .error { color: #dc2626; border-color: #fecaca; background: #fef2f2; }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<div class="container" style="max-width: 900px; margin: 0 auto;">
-    <a href="index.html" class="btn-back">← ВЕРНУТЬСЯ К РЕЕСТРУ РАБОТ</a>
-    
-    <div class="paper">
-        <div class="academic-header">
-            <p>МИНИСТЕРСТВО ОБРАЗОВАНИЯ И НАУКИ</p>
-            <h1>ОТЧЕТ ПО ЛАБОРАТОРНОЙ РАБОТЕ №1</h1>
-            <p>Дисциплина: Программирование кредитных отношений и банковское дело</p>
-            
-            <div class="student-info">
-                <div>
-                    <strong>Выполнил:</strong> студент jakemonmercer-spec<br>
-                    <strong>Группа:</strong> ИСТ-2-22
-                </div>
-                <div>
-                    <strong>Проверил:</strong> Старший преподаватель<br>
-                    <strong>Дата:</strong> 2024 г.
-                </div>
-            </div>
-        </div>
+<div class="container">
+    <header>
+        <h1>📚 Лабораторные работы</h1>
+        <p>Студент: <strong>jakemonmercer-spec</strong></p>
+        <p>Дисциплина: Программирование кредитных отношений</p>
+    </header>
 
-        <section>
-            <h2>Аннотация</h2>
-            <p>В данной работе исследуется математический аппарат начисления процентов в банковской сфере. Целью работы является программная реализация алгоритмов расчета простых и сложных процентов на языке Python, а также сравнительный анализ их эффективности при долгосрочном инвестировании.</p>
-        </section>
-
-        <section>
-            <h2>1. Математическая модель</h2>
-            <p>Для расчета простых процентов используется линейная модель:</p>
-            <div class="formula-box">
-                \[S = P(1 + i \cdot n)\]
-            </div>
-            <p>Для расчета сложных процентов (капитализация) применяется экспоненциальная модель:</p>
-            <div class="formula-box">
-                \[S = P \left(1 + \frac{i}{m}\right)^{m \cdot n}\]
-            </div>
-            <p>Где \(P\) — начальная сумма, \(i\) — годовая ставка, \(n\) — срок в годах, \(m\) — количество периодов капитализации в год.</p>
-        </section>
-
-        <section>
-            <h2>2. Программная реализация (Python)</h2>
-            <div class="code-block">
-<pre>
-import math
-
-def calculate_finance(p, r, t, m=12):
-    """
-    p - principal (сумма)
-    r - annual rate (ставка в %)
-    t - time in years (срок)
-    m - compound periods (периоды капитализации)
-    """
-    # Расчет простых процентов
-    simple = p * (1 + (r/100) * t)
-    
-    # Расчет сложных процентов
-    compound = p * math.pow((1 + (r/100)/m), (m * t))
-    
-    return round(simple, 2), round(compound, 2)
-</pre>
-            </div>
-        </section>
-
-        <section>
-            <h2>3. Визуализация и динамический анализ</h2>
-            <div class="interactive-panel">
-                <strong>Параметры моделирования:</strong><br><br>
-                Сумма: <input type="number" id="p" value="100000" oninput="updateChart()"> 
-                Ставка (%): <input type="number" id="r" value="15" oninput="updateChart()"> 
-                Срок (лет): <input type="number" id="t" value="10" oninput="updateChart()">
-            </div>
-
-            <div class="chart-container">
-                <canvas id="financeChart"></canvas>
-            </div>
-        </section>
-
-        <section>
-            <h2>4. Заключение</h2>
-            <p>На основе проведенных расчетов выявлено, что при сроке инвестирования более 3-х лет эффект капитализации (сложные проценты) приводит к существенному отрыву доходности от простых процентов. В банковских продуктах использование Python позволяет создавать гибкие модели для расчета аннуитетных и дифференцированных платежей с высокой точностью.</p>
-        </section>
-
-        <div style="text-align: center; margin-top: 100px; font-size: 0.8rem; border-top: 1px solid #eee;">
-            Электронная подпись документа: #ID-JAKEMON-2024-SPEC
+    <div id="status-container">
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            Загрузка списка заданий с GitHub...
         </div>
     </div>
+    
+    <ul id="homework-list"></ul>
 </div>
 
 <script>
-let myChart;
+    // --- НАСТРОЙКИ ---
+    const USERNAME = 'jakemonmercer-spec'; 
+    const REPO = 'jakemonmercer-spec.github.io'; 
+    // -----------------
 
-function updateChart() {
-    const p = parseFloat(document.getElementById('p').value) || 0;
-    const r = parseFloat(document.getElementById('r').value) || 0;
-    const t = parseInt(document.getElementById('t').value) || 0;
-    
-    let labels = [];
-    let simpleData = [];
-    let compoundData = [];
+    async function fetchHomeworks() {
+        const listElement = document.getElementById('homework-list');
+        const loadingElement = document.getElementById('loading');
+        const url = `https://api.github.com/repos/${USERNAME}/${REPO}/contents/`;
 
-    for (let i = 0; i <= t; i++) {
-        labels.push('Год ' + i);
-        simpleData.push(p * (1 + (r/100) * i));
-        compoundData.push(p * Math.pow((1 + (r/100)/12), (12 * i)));
+        try {
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                if(response.status === 403) throw new Error("Превышен лимит запросов API. Попробуйте позже.");
+                if(response.status === 404) throw new Error("Репозиторий не найден. Проверьте настройки.");
+                throw new Error("Не удалось загрузить данные.");
+            }
+
+            const files = await response.json();
+            
+            // Скрываем загрузку
+            loadingElement.style.display = 'none';
+
+            // Фильтруем файлы (только .html и не index.html)
+            const homeworks = files.filter(file => {
+                const name = file.name.toLowerCase();
+                return name.endsWith('.html') && name !== 'index.html';
+            });
+
+            if (homeworks.length === 0) {
+                listElement.innerHTML = `
+                    <div class="empty">
+                        <p>В репозитории пока нет файлов с заданиями.</p>
+                        <p style="font-size: 0.9rem; color: #64748b;">Добавьте файлы (например, lab1.html) в корень вашего проекта.</p>
+                    </div>`;
+                return;
+            }
+
+            // Сортировка (лабораторные будут идти по порядку: 1, 2, 3...)
+            homeworks.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true, sensitivity: 'base'}));
+
+            // Создаем карточки
+            homeworks.forEach(hw => {
+                const card = document.createElement('a');
+                card.className = 'hw-card';
+                card.href = hw.name;
+
+                // Красивое имя: убираем .html, заменяем - на пробел, делаем заглавными первую букву
+                const cleanName = hw.name.replace(/\.[^/.]+$/, "").replace(/-/g, ' ');
+                const formattedName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+
+                card.innerHTML = `
+                    <div>
+                        <span class="type">Документ</span>
+                        <div class="title">${formattedName}</div>
+                    </div>
+                    <div class="status">Открыть отчет</div>
+                `;
+                listElement.appendChild(card);
+            });
+
+        } catch (error) {
+            console.error(error);
+            loadingElement.parentElement.innerHTML = `
+                <div class="error">
+                    <strong>Произошла ошибка:</strong><br>
+                    ${error.message}
+                </div>`;
+        }
     }
 
-    if (myChart) { myChart.destroy(); }
-
-    const ctx = document.getElementById('financeChart').getContext('2d');
-    myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Сложные проценты',
-                    data: compoundData,
-                    borderColor: '#10b981',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    fill: true,
-                    tension: 0.4
-                },
-                {
-                    label: 'Простые проценты',
-                    data: simpleData,
-                    borderColor: '#ef4444',
-                    borderDash: [5, 5],
-                    fill: false,
-                    tension: 0
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                title: { display: true, text: 'Сравнение динамики роста капитала' }
-            },
-            scales: {
-                y: { beginAtZero: false, title: { display: true, text: 'Сумма (₽)' } }
-            }
-        }
-    });
-}
-
-// Инициализация при загрузке
-window.onload = updateChart;
+    fetchHomeworks();
 </script>
 
 </body>
