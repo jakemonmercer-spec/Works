@@ -2,327 +2,330 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Лабораторная работа №1 | Исследование процентов</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Лабораторная №1 | Махаматсалиев Жангазы</title>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Fira+Code&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --primary: #2563eb;
-            --dark: #0f172a;
-            --accent: #10b981;
+            --primary: #0066ff;
+            --dark: #0a0a0b;
+            --accent: #00d169;
             --bg: #ffffff;
-            --section-bg: #f8fafc;
+            --card-bg: #f4f7fa;
         }
+
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Manrope', sans-serif;
             color: var(--dark);
-            line-height: 1.8;
+            line-height: 1.6;
             margin: 0;
-            overflow-x: hidden;
+            background-color: var(--bg);
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Кнопка Назад */
-        .exit-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: white;
-            color: var(--dark);
-            padding: 10px 20px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            z-index: 1000;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s;
-        }
-        .exit-btn:hover {
-            background: var(--dark);
-            color: white;
-            transform: scale(1.05);
-        }
-
-        /* Обложка */
-        .hero {
-            height: 80vh;
+        /* Навигация (Адаптивная кнопка) */
+        .header-nav {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #eee;
+            z-index: 1000;
+        }
+
+        .exit-link {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Обложка (Hero) */
+        .hero {
+            padding: 60px 20px;
             text-align: center;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            padding: 0 20px;
+            background: radial-gradient(circle at top right, #f0f7ff, #ffffff);
         }
 
         .hero h1 {
-            font-size: clamp(2rem, 5vw, 4rem);
+            font-size: clamp(1.8rem, 8vw, 3.5rem);
+            line-height: 1.1;
+            margin-bottom: 20px;
             font-weight: 800;
-            margin: 0;
-            letter-spacing: -2px;
         }
 
         .hero p {
-            font-size: 1.2rem;
-            color: var(--primary);
-            max-width: 600px;
-            margin-top: 20px;
+            font-size: clamp(1rem, 4vw, 1.25rem);
+            color: #4b5563;
+            max-width: 700px;
+            margin: 0 auto;
         }
 
-        /* Контентные секции */
-        .section {
+        .badge {
+            display: inline-block;
+            background: #e0f0ff;
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        /* Секции */
+        .content-section {
             max-width: 800px;
             margin: 0 auto;
-            padding: 80px 20px;
+            padding: 40px 20px;
         }
 
-        .section h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-        }
-
-        .section h2::before {
-            content: '0' counter(section-counter);
-            counter-increment: section-counter;
-            font-size: 1rem;
-            color: var(--primary);
-            margin-right: 15px;
-            border: 1px solid var(--primary);
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-
-        body { counter-reset: section-counter; }
-
-        .highlight-box {
-            background: var(--section-bg);
-            padding: 30px;
-            border-radius: 20px;
+        .content-section h2 {
+            font-size: clamp(1.4rem, 5vw, 2rem);
+            margin-bottom: 20px;
             border-left: 4px solid var(--primary);
-            margin: 30px 0;
+            padding-left: 15px;
         }
 
-        /* Код */
-        .code-wrap {
-            background: #1e1e1e;
+        .thought-card {
+            background: var(--card-bg);
             padding: 25px;
+            border-radius: 20px;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        /* Код (адаптивный) */
+        .code-window {
+            background: #1e1e1e;
+            padding: 20px;
             border-radius: 15px;
             overflow-x: auto;
-            margin: 40px 0;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        pre { font-family: 'Fira Code', monospace; color: #d4d4d4; font-size: 14px; margin: 0; }
+        pre { font-family: 'Fira Code', monospace; color: #d4d4d4; font-size: 13px; margin: 0; }
 
-        /* Калькулятор */
+        /* Интерактивный дашборд (Mobile First) */
         .dashboard {
             background: var(--dark);
             color: white;
-            padding: 40px;
-            border-radius: 30px;
-            margin: 60px 0;
+            padding: 25px;
+            border-radius: 24px;
+            margin: 40px 0;
         }
 
         .dash-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
+            grid-template-columns: 1fr; /* По умолчанию в один ряд для мобилок */
+            gap: 25px;
         }
 
-        .controls input {
+        @min-width 768px {
+            .dash-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 0.8rem; margin-bottom: 8px; opacity: 0.7; }
+        .input-group input {
             width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border-radius: 8px;
+            padding: 14px;
+            border-radius: 12px;
             border: none;
-            font-size: 1rem;
+            background: #232326;
+            color: white;
+            font-size: 1.1rem;
+            outline: none;
         }
 
-        .chart-box { background: white; padding: 20px; border-radius: 20px; min-height: 300px; }
+        .res-display {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+        }
+        .res-display strong { font-size: 1.8rem; color: var(--accent); display: block; }
+
+        .chart-container {
+            background: white;
+            padding: 15px;
+            border-radius: 16px;
+            height: 250px;
+            width: 100%;
+        }
 
         /* Футер */
         footer {
+            background: #000;
+            color: white;
+            padding: 60px 20px;
             text-align: center;
-            padding: 100px 20px;
-            background: var(--section-bg);
         }
 
-        .final-btn {
+        .btn-main {
+            display: inline-block;
             background: var(--primary);
             color: white;
-            padding: 18px 40px;
-            border-radius: 50px;
+            padding: 16px 32px;
+            border-radius: 100px;
             text-decoration: none;
             font-weight: 700;
-            transition: 0.3s;
-            display: inline-block;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 300px;
         }
-        .final-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3); }
 
-        @media (max-width: 768px) {
-            .dash-grid { grid-template-columns: 1fr; }
-            .section { padding: 40px 20px; }
-        }
+        /* Для MathJax на мобильных */
+        .mjx-chtml { font-size: 90% !important; overflow-x: auto; }
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="exit-btn">← Выйти в меню</a>
+    <nav class="header-nav">
+        <a href="index.html" class="exit-link">← На главную</a>
+        <div style="font-size: 0.8rem; font-weight: 700;">ЛАБ №1</div>
+    </nav>
 
     <header class="hero">
-        <h1>Деньги во времени.</h1>
-        <p>Почему программирование — это единственный способ понять, как банки зарабатывают на нас (и как нам заработать на них).</p>
-        <div style="margin-top: 40px; font-size: 0.9rem; opacity: 0.6;">
-            Лабораторная работа №1 • Студент: jakemonmercer-spec
-        </div>
+        <span class="badge">Кредитные отношения и банки</span>
+        <h1>Магия процентов в коде.</h1>
+        <p>Я, Махаматсалиев Жангазы, представляю расчетную модель банковских вкладов, адаптированную под условия Кыргызстана.</p>
     </header>
 
-    <main class="section">
-        <h2>Почему я выбрал Python вместо Excel?</h2>
+    <main class="content-section">
+        <h2>В чем суть?</h2>
         <p>
-            Большинство студентов привыкли считать проценты в таблицах. Но у Excel есть проблема: он статичен. 
-            Когда мы говорим о реальных банковских данных — миллионах транзакций в секунду — таблицы «умирают». 
+            В Кыргызстане банковский сектор активно развивается, и многие до сих пор считают доходность вкладов "на глаз" или через Excel. 
+            Но когда мы говорим о реальных финансах, нужна точность Python. 
         </p>
-        <div class="highlight-box">
-            <strong>Моя идея:</strong> Я решил написать чистый код на Python, который можно масштабировать. 
-            Это не просто расчет одной ячейки, это алгоритм, который может стать частью банковского приложения.
-        </div>
-
-        <h2>Математика, которая не лжет</h2>
-        <p>
-            В банковском деле есть две стороны медали: <strong>Простой процент</strong> (обычно это займы между физлицами) 
-            и <strong>Сложный процент</strong> (это база для вкладов и ипотек). 
-        </p>
-        <p>Формула капитализации выглядит изящно, но скрывает в себе огромную силу:</p>
-        <div style="text-align: center; font-size: 1.5rem; margin: 40px 0;">
-            \[A = P \left(1 + \frac{r}{n}\right)^{nt}\]
-        </div>
-        <p>
-            Суть в том, что каждый месяц ваши заработанные проценты сами начинают приносить деньги. 
-            В программировании это решается через простые циклы или возведение в степень.
-        </p>
-
-        <h2>Мой программный код</h2>
-        <p>Вот фрагмент моего решения на Python. Я постарался сделать его читаемым и «человечным», добавив обработку параметров.</p>
         
-        <div class="code-wrap">
-            <pre>
-<span style="color: #6a9955;"># Функция, которая считает реальную прибыль</span>
-<span style="color: #569cd6;">def</span> <span style="color: #dcdcaa;">calculate_wealth</span>(principal, rate, years, compounding_steps=<span style="color: #b5cea8;">12</span>):
-    <span style="color: #6a9955;"># Мы переводим годовую ставку в десятичную дробь</span>
-    decimal_rate = rate / <span style="color: #b5cea8;">100</span>
-    
-    <span style="color: #6a9955;"># Магия сложного процента за одну строку кода</span>
-    final_amount = principal * (1 + decimal_rate / compounding_steps) ** (compounding_steps * years)
-    
-    <span style="color: #569cd6;">return</span> <span style="color: #dcdcaa;">round</span>(final_amount, <span style="color: #b5cea8;">2</span>)
-
-<span style="color: #6a9955;"># Тестируем на сумме 100к под 15% годовых</span>
-print(f"Итог: {calculate_wealth(100000, 15, 5)} руб.")
-            </pre>
+        <div class="thought-card">
+            <strong>Моё мнение:</strong> Код позволяет автоматизировать процесс. Представьте, что банк меняет условия капитализации тысячи вкладов за секунду. 
+            Руками это сделать невозможно, а мой алгоритм справится за миллисекунды.
         </div>
 
-        <h2>Интерактивный симулятор</h2>
-        <p>Чтобы не быть многословным, я перенес логику своего Python-скрипта прямо сюда. Поиграйте с ползунками и посмотрите, как взлетает график при увеличении срока.</p>
+        <h2>Математическая база</h2>
+        <p>Для вкладов в сомах (KGS) чаще всего используется капитализация. Формула экспоненциального роста:</p>
+        <div style="overflow-x: auto; margin: 20px 0;">
+            \[S = P \left(1 + \frac{i}{m}\right)^{m \cdot n}\]
+        </div>
+
+        <h2>Программа на Python</h2>
+        <p>Этот код — ядро моих расчетов. Он учитывает периоды начисления и время:</p>
+        <div class="code-window">
+<pre>
+def get_bank_profit(p, r, t, m=12):
+    # p - сумма в сомах, r - ставка %, t - годы
+    # m=12 (ежемесячная капитализация)
+    rate = r / 100
+    return round(p * (1 + rate/m)**(m*t), 2)
+
+# Пример: 100,000 сом под 15% на 5 лет
+print(get_bank_profit(100000, 15, 5))
+</pre>
+        </div>
+
+        <h2>Живой симулятор (KGS)</h2>
+        <p>Я перенес логику Python прямо в этот интерфейс. Попробуйте сами изменить цифры:</p>
 
         <div class="dashboard">
             <div class="dash-grid">
                 <div class="controls">
-                    <label>Начальный капитал (₽)</label>
-                    <input type="number" id="p" value="100000" oninput="update()">
-                    
-                    <label>Процентная ставка (%)</label>
-                    <input type="number" id="r" value="15" oninput="update()">
-                    
-                    <label>Срок (лет)</label>
-                    <input type="number" id="t" value="10" oninput="update()">
-
-                    <div style="margin-top: 30px; border-top: 1px solid #334155; padding-top: 20px;">
-                        <small style="opacity: 0.6;">Итоговая сумма:</small>
-                        <div style="font-size: 2rem; font-weight: 800; color: var(--accent);" id="res">444 021 ₽</div>
+                    <div class="input-group">
+                        <label>Сумма в сомах (KGS)</label>
+                        <input type="number" id="p" value="100000" oninput="run()">
+                    </div>
+                    <div class="input-group">
+                        <label>Ставка в год (%)</label>
+                        <input type="number" id="r" value="16" oninput="run()">
+                    </div>
+                    <div class="input-group">
+                        <label>Срок (лет)</label>
+                        <input type="number" id="t" value="5" oninput="run()">
+                    </div>
+                    <div class="res-display">
+                        <small>Итого через <span id="y-label">5</span> л.:</small>
+                        <strong id="final-res">221 034 сом</strong>
                     </div>
                 </div>
-                <div class="chart-box">
-                    <canvas id="myChart"></canvas>
+                <div class="chart-container">
+                    <canvas id="chart"></canvas>
                 </div>
             </div>
         </div>
 
-        <h2>Выводы после разработки</h2>
+        <h2>Заключение</h2>
         <p>
-            Работая над этой программой, я понял одну вещь: банки выигрывают не потому, что у них много денег, 
-            а потому, что они умеют использовать <strong>время</strong>. 
-        </p>
-        <ul>
-            <li><strong>Простой процент:</strong> Линейный и скучный. Подходит для быстрых долгов другу.</li>
-            <li><strong>Сложный процент:</strong> Настоящая финансовая машина. Разница на дистанции в 10 лет может составлять 2-3 раза.</li>
-        </ul>
-        <p>
-            Программирование кредитных отношений — это не про цифры, а про алгоритмы, которые управляют миром финансов. 
-            Моя программа подтверждает: даже небольшие вложения, но под правильный процент и на долгий срок, превращаются в капитал.
+            Программирование — это мощный инструмент для экономиста. Расчеты показывают, что в условиях инфляции 
+            сложный процент в сомах — это один из немногих способов не просто сохранить, но и преумножить капитал.
         </p>
     </main>
 
     <footer>
-        <h2 style="justify-content: center; border: none;">На этом всё!</h2>
-        <p style="margin-bottom: 40px;">Спасибо за внимание к моей первой работе.</p>
-        <a href="index.html" class="final-btn">ВЕРНУТЬСЯ В ПОРТФОЛИО</a>
+        <div style="font-size: 1.2rem; font-weight: 800; margin-bottom: 10px;">Махаматсалиев Жангазы</div>
+        <p style="opacity: 0.6; font-size: 0.9rem;">ИСТ-2-22 | Кыргызстан, 2024</p>
+        <a href="index.html" class="btn-main">ВЕРНУТЬСЯ В МЕНЮ</a>
     </footer>
 
     <script>
-        let chart;
-        function update() {
+        let myChart;
+        function run() {
             const p = parseFloat(document.getElementById('p').value) || 0;
             const r = parseFloat(document.getElementById('r').value) || 0;
             const t = parseInt(document.getElementById('t').value) || 0;
+            
+            document.getElementById('y-label').innerText = t;
 
-            let labels = [];
-            let dataSimple = [];
-            let dataCompound = [];
-
-            for (let i = 0; i <= t; i++) {
-                labels.push(i + 'г.');
-                dataSimple.push(p * (1 + (r/100) * i));
-                dataCompound.push(p * Math.pow((1 + (r/100)/12), (12 * i)));
+            let years = [];
+            let data = [];
+            for(let i=0; i<=t; i++) {
+                years.push(i + 'г');
+                data.push(Math.round(p * Math.pow((1 + (r/100)/12), (12 * i))));
             }
 
-            document.getElementById('res').innerText = Math.round(dataCompound[dataCompound.length-1]).toLocaleString() + ' ₽';
+            document.getElementById('final-res').innerText = data[data.length-1].toLocaleString() + ' сом';
 
-            if (chart) chart.destroy();
-            chart = new Chart(document.getElementById('myChart'), {
+            if(myChart) myChart.destroy();
+            const ctx = document.getElementById('chart').getContext('2d');
+            myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels: years,
                     datasets: [{
-                        label: 'Сложный %',
-                        data: dataCompound,
-                        borderColor: '#10b981',
-                        tension: 0.4,
+                        label: 'Баланс (сом)',
+                        data: data,
+                        borderColor: '#00d169',
+                        backgroundColor: 'rgba(0, 209, 105, 0.1)',
                         fill: true,
-                        backgroundColor: 'rgba(16, 185, 129, 0.05)'
-                    }, {
-                        label: 'Простой %',
-                        data: dataSimple,
-                        borderColor: '#ef4444',
-                        borderDash: [5, 5]
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointRadius: 0
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
-                    scales: { y: { display: false }, x: { grid: { display: false } } }
+                    scales: { 
+                        x: { grid: { display: false }, ticks: { font: { size: 10 } } },
+                        y: { display: false }
+                    }
                 }
             });
         }
-        update();
+        window.onload = run;
     </script>
 </body>
 </html>
