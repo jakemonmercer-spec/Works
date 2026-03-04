@@ -20,6 +20,72 @@
         }
 
         * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        html, body {
+    overflow-x: hidden; /* Запрещаем горизонтальную прокрутку всей страницы */
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+
+pre, .code-window, .code-wrap, .code-block {
+    max-width: 100% !important;
+    white-space: pre-wrap !important;       /* Переносит длинные строки кода на новую строку */
+    word-break: break-all !important;       /* Разрывает очень длинные слова */
+    overflow-x: auto !important;            /* Добавляет прокрутку внутри блока, если код всё же не влез */
+    display: block;
+}
+
+/* 4. Таблицы: упаковываем в контейнер с прокруткой */
+.table-scroll, .table-wrap {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    min-width: 500px; /* Чтобы таблица не превратилась в кашу, она будет скроллиться вбок */
+}
+
+/* 5. Математические формулы (MathJax) */
+.mjx-container {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}
+
+/* 6. Картинки и графики */
+canvas, img {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* 7. Адаптация сетки калькулятора */
+.dash-grid, .calc-grid, .interactive-grid {
+    display: flex !important;
+    flex-direction: column !important; /* На мобилках всё в один столбик */
+    gap: 20px;
+}
+
+@media (min-width: 768px) {
+    .dash-grid, .calc-grid, .interactive-grid {
+        flex-direction: row !important; /* На компах возвращаем в ряд */
+    }
+    .container, .content-section, .paper, .section {
+        padding: 40px !important; /* Возвращаем нормальные отступы для ПК */
+        max-width: 900px !important;
+    }
+}
+
+        
+        .container, .content-section, .paper, .section {
+    width: 100% !important;
+    max-width: 100% !important; /* Убираем жесткие 800px/900px на мобилках */
+    margin: 0 auto !important;
+    padding: 15px !important; /* Уменьшаем боковые отступы для узких экранов */
+}
         
         body { 
             font-family: 'Manrope', sans-serif; 
