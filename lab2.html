@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Лаб №2 | Аннуитетный кредит | Махаматсалиев Жангазы</title>
+    <title>Лаб №2 | Аннуитет | Жангазы</title>
     
     <!-- Библиотеки -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -11,285 +11,305 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Fira+Code&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --primary: #1e40af; /* Банковский синий */
-            --accent: #10b981; /* Зеленый (успех) */
-            --bg: #f8fafc;
-            --white: #ffffff;
-            --text: #1e293b;
+        /* 1. БАЗОВЫЕ НАСТРОЙКИ (БЕЗ ВЫПИРАНИЯ) */
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
         }
 
-        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         html, body {
-    overflow-x: hidden; /* Запрещаем горизонтальную прокрутку всей страницы */
-    width: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-
-
-
-pre, .code-window, .code-wrap, .code-block {
-    max-width: 100% !important;
-    white-space: pre-wrap !important;       /* Переносит длинные строки кода на новую строку */
-    word-break: break-all !important;       /* Разрывает очень длинные слова */
-    overflow-x: auto !important;            /* Добавляет прокрутку внутри блока, если код всё же не влез */
-    display: block;
-}
-
-/* 4. Таблицы: упаковываем в контейнер с прокруткой */
-.table-scroll, .table-wrap {
-    width: 100% !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-}
-
-table {
-    min-width: 500px; /* Чтобы таблица не превратилась в кашу, она будет скроллиться вбок */
-}
-
-/* 5. Математические формулы (MathJax) */
-.mjx-container {
-    max-width: 100% !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-}
-
-/* 6. Картинки и графики */
-canvas, img {
-    max-width: 100% !important;
-    height: auto !important;
-}
-
-/* 7. Адаптация сетки калькулятора */
-.dash-grid, .calc-grid, .interactive-grid {
-    display: flex !important;
-    flex-direction: column !important; /* На мобилках всё в один столбик */
-    gap: 20px;
-}
-
-@media (min-width: 768px) {
-    .dash-grid, .calc-grid, .interactive-grid {
-        flex-direction: row !important; /* На компах возвращаем в ряд */
-    }
-    .container, .content-section, .paper, .section {
-        padding: 40px !important; /* Возвращаем нормальные отступы для ПК */
-        max-width: 900px !important;
-    }
-}
-
-        
-        .container, .content-section, .paper, .section {
-    width: 100% !important;
-    max-width: 100% !important; /* Убираем жесткие 800px/900px на мобилках */
-    margin: 0 auto !important;
-    padding: 15px !important; /* Уменьшаем боковые отступы для узких экранов */
-}
-        
-        body { 
-            font-family: 'Manrope', sans-serif; 
-            color: var(--text); 
-            line-height: 1.6; 
-            margin: 0; 
-            background: var(--bg); 
+            overflow-x: hidden; /* Запрещаем боковой скролл всей страницы */
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            font-family: 'Manrope', sans-serif;
+            color: #1e293b;
         }
 
-        /* Навигация */
+        /* 2. НАВИГАЦИЯ */
         .top-nav {
-            position: sticky; top: 0; 
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(10px); 
-            padding: 15px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid #e2e8f0; z-index: 1000;
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            z-index: 1000;
         }
-        .top-nav a { text-decoration: none; color: var(--primary); font-weight: 800; font-size: 0.9rem; }
 
-        /* Шапка */
-        .hero { padding: 60px 20px; text-align: center; background: white; border-bottom: 1px solid #e2e8f0; }
-        .hero h1 { font-size: clamp(1.8rem, 7vw, 2.5rem); font-weight: 800; color: var(--primary); margin: 0; }
-        .hero p { color: #64748b; margin-top: 10px; font-size: 1.1rem; }
-
-        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-
-        /* Текстовые блоки */
-        .card { background: var(--white); padding: 25px; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 30px; }
-        .theory-box { border-left: 5px solid var(--primary); background: #eff6ff; }
-
-        /* Формула */
-        .math-scroll { overflow-x: auto; padding: 20px 0; text-align: center; font-size: 1.2rem; }
-
-        /* Код */
-        .code-window { background: #1e1e1e; padding: 20px; border-radius: 15px; overflow-x: auto; margin: 20px 0; }
-        pre { font-family: 'Fira Code', monospace; color: #d4d4d4; font-size: 13px; margin: 0; }
-
-        /* Калькулятор (Адаптивный Grid) */
-        .calc-section { 
-            background: var(--primary); 
-            color: white; 
-            padding: 30px; 
-            border-radius: 25px; 
-            margin: 40px 0;
+        .top-nav a {
+            text-decoration: none;
+            color: #1e40af;
+            font-weight: 800;
+            font-size: 0.9rem;
         }
-        .calc-grid { 
-            display: grid; 
-            grid-template-columns: 1fr; 
-            gap: 30px; 
+
+        /* 3. КОНТЕЙНЕРЫ */
+        .hero {
+            padding: 40px 20px;
+            text-align: center;
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
         }
+
+        .hero h1 {
+            font-size: clamp(1.5rem, 6vw, 2.2rem);
+            margin: 0;
+            color: #1e40af;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 15px; /* Узкие отступы для мобилок */
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            width: 100%;
+            overflow: hidden; /* Чтобы внутренности не вылезали */
+        }
+
+        /* 4. ИСПРАВЛЕНИЕ ВЫПИРАЮЩЕГО КОДА И ФОРМУЛ */
+        .code-window {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        pre {
+            font-family: 'Fira Code', monospace;
+            color: #d4d4d4;
+            font-size: 12px;
+            margin: 0;
+            white-space: pre-wrap; /* Перенос длинных строк кода */
+            word-break: break-all;
+            overflow-x: hidden;
+        }
+
+        .math-scroll {
+            width: 100%;
+            overflow-x: auto; /* Скролл только для формулы */
+            padding: 10px 0;
+            margin: 10px 0;
+        }
+
+        /* 5. КАЛЬКУЛЯТОР (АДАПТИВНЫЙ GRID) */
+        .calc-panel {
+            background: #1e40af;
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* 1 колонка на мобилках */
+            gap: 25px;
+        }
+
         @media (min-width: 768px) {
-            .calc-grid { grid-template-columns: 1fr 1.5fr; }
+            .calc-grid { grid-template-columns: 1fr 1fr; }
+            .container { padding: 40px 20px; }
         }
 
-        .inputs label { display: block; font-size: 0.8rem; margin-bottom: 8px; opacity: 0.8; }
-        .inputs input { 
-            width: 100%; padding: 14px; border-radius: 12px; border: none; 
-            background: rgba(255,255,255,0.15); color: white; 
-            font-size: 1.1rem; margin-bottom: 20px; outline: none;
+        .inputs label {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 6px;
+            opacity: 0.8;
         }
-        .inputs input::placeholder { color: rgba(255,255,255,0.5); }
 
-        .res-box { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 15px; text-align: center; }
-        .res-box span { font-size: 2rem; font-weight: 800; color: #fbbf24; display: block; }
+        .inputs input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            outline: none;
+        }
 
-        .chart-container { background: white; padding: 15px; border-radius: 20px; height: 300px; }
+        .res-display {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
 
-        /* Таблица */
-        .table-scroll { overflow-x: auto; margin-top: 20px; border-radius: 12px; border: 1px solid #e2e8f0; }
-        table { width: 100%; border-collapse: collapse; background: white; min-width: 600px; }
-        th { background: #f8fafc; padding: 15px; text-align: left; font-size: 0.8rem; text-transform: uppercase; color: #64748b; }
-        td { padding: 15px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; }
+        .res-display strong {
+            font-size: 1.5rem;
+            color: #fbbf24;
+            display: block;
+        }
 
-        footer { background: #0f172a; color: white; padding: 60px 20px; text-align: center; margin-top: 60px; }
-        .btn-home { display: inline-block; background: var(--primary); color: white; padding: 16px 32px; border-radius: 100px; text-decoration: none; font-weight: 800; margin-top: 20px; }
+        .chart-wrap {
+            background: white;
+            padding: 10px;
+            border-radius: 12px;
+            height: 250px;
+            width: 100%;
+        }
+
+        /* 6. ТАБЛИЦА (СО СКРОЛЛОМ) */
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto; /* Горизонтальный скролл только для таблицы */
+            -webkit-overflow-scrolling: touch;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        table {
+            width: 100%;
+            min-width: 500px; /* Чтобы данные не слипались */
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        th { background: #f8fafc; color: #64748b; }
+
+        footer {
+            background: #0f172a;
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .btn-exit {
+            display: inline-block;
+            background: #1e40af;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
 
     <nav class="top-nav">
         <a href="index.html">← ПОРТФОЛИО</a>
-        <div style="font-weight: 600; font-size: 0.8rem;">ЛАБ №2</div>
+        <div style="font-weight: 800; font-size: 0.75rem; color: #64748b;">ЛАБ №2</div>
     </nav>
 
     <header class="hero">
-        <h1>Расчет аннуитетного кредита</h1>
-        <p>Разработка алгоритма ежемесячных платежей и графиков погашения.</p>
-        <div style="margin-top: 15px; font-weight: 700;">Студент: Махаматсалиев Жангазы</div>
+        <h1>Кредитный калькулятор</h1>
+        <p>Махаматсалиев Жангазы | ИСТ-2-22</p>
     </header>
 
     <div class="container">
         
-        <section class="card theory-box">
-            <h2>Что такое аннуитет?</h2>
-            <p>
-                Аннуитетный платеж — это вариант выплат по кредиту, когда ежемесячный взнос остается <strong>неизменным</strong> на протяжении всего срока. 
-                Это самая популярная схема в банках Кыргызстана. Однако внутри платежа пропорция меняется: в начале вы платите больше процентов, а в конце — основной долг.
-            </p>
+        <section class="card" style="border-left: 5px solid #1e40af;">
+            <h2 style="margin-top: 0;">Что такое Аннуитет?</h2>
+            <p>Это система погашения кредита равными суммами ежемесячно. В отличие от дифференцированной схемы, здесь вы всегда знаете точную сумму платежа, что удобно для личного бюджета в <strong>Кыргызстане</strong>.</p>
         </section>
 
         <section class="card">
-            <h2>Математическая модель</h2>
-            <p>Расчет коэффициента аннуитета производится по формуле:</p>
+            <h2>Формула расчета</h2>
             <div class="math-scroll">
                 \[A = P \frac{r(1+r)^n}{(1+r)^n - 1}\]
             </div>
-            <p style="font-size: 0.85rem; color: #64748b;">
-                Где: <strong>P</strong> — сумма кредита, <strong>r</strong> — процентная ставка в месяц, <strong>n</strong> — срок в месяцах.
-            </p>
+            <p style="font-size: 0.8rem; color: #64748b;">Где P — сумма, r — ставка в месяц, n — срок в месяцах.</p>
         </section>
 
         <section class="card">
-            <h2>Реализация на Python</h2>
-            <p>Программный расчет позволяет автоматизировать вывод графиков для тысяч клиентов одновременно.</p>
+            <h2>Логика на Python</h2>
             <div class="code-window">
 <pre>
-def calculate_annuity(p, annual_rate, years):
-    # Месячная ставка
-    r = annual_rate / 100 / 12
-    # Срок в месяцах
+def calculate_annuity(p, rate, years):
+    r = rate / 100 / 12
     n = years * 12
-    
-    # Формула аннуитета
-    payment = p * (r * (1 + r)**n) / ((1 + r)**n - 1)
-    
-    return round(payment, 2)
+    # Расчет ежемесячного платежа
+    return p * (r * (1+r)**n) / ((1+r)**n - 1)
 
-# Пример: 500,000 сом, 22% годовых на 3 года
-print(f"Платеж: {calculate_annuity(500000, 22, 3)} KGS")
+print(calculate_annuity(100000, 18, 2))
 </pre>
             </div>
         </section>
 
-        <!-- ИНТЕРАКТИВНЫЙ КАЛЬКУЛЯТОР -->
-        <section class="calc-section">
-            <h2 style="color: white; margin-top: 0;">Интерактивный расчет</h2>
+        <section class="calc-panel">
             <div class="calc-grid">
                 <div class="inputs">
-                    <label>Сумма кредита (сом)</label>
-                    <input type="number" id="p" value="300000" oninput="update()">
+                    <label>Сумма кредита (KGS)</label>
+                    <input type="number" id="p" value="200000" oninput="run()">
                     
-                    <label>Годовая ставка (%)</label>
-                    <input type="number" id="r" value="18" oninput="update()">
+                    <label>Ставка годовая (%)</label>
+                    <input type="number" id="r" value="18" oninput="run()">
                     
-                    <label>Срок кредита (лет)</label>
-                    <input type="number" id="t" value="2" oninput="update()">
+                    <label>Срок (лет)</label>
+                    <input type="number" id="t" value="3" oninput="run()">
 
-                    <div class="res-box">
-                        <small>Ежемесячный платеж:</small>
-                        <span id="monthly-payment">0 сом</span>
+                    <div class="res-display">
+                        <small>Ваш платеж в месяц:</small>
+                        <strong id="m-payment">0 сом</strong>
                     </div>
                 </div>
-                <div class="chart-container">
+                <div class="chart-wrap">
                     <canvas id="loanChart"></canvas>
                 </div>
             </div>
         </section>
 
         <section class="card">
-            <h2>График платежей (первый год)</h2>
-            <div class="table-scroll">
-                <table id="schedule-table">
+            <h2 style="margin-top: 0;">График (1-й год)</h2>
+            <div class="table-wrap">
+                <table id="schedule">
                     <thead>
                         <tr>
-                            <th>Месяц</th>
+                            <th>Мес.</th>
                             <th>Платеж</th>
                             <th>Проценты</th>
-                            <th>Тело долга</th>
+                            <th>Долг</th>
                             <th>Остаток</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- Генерируется через JS -->
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
-        </section>
-
-        <section class="card theory-box">
-            <h2>Вывод</h2>
-            <p>
-                Разработанная программа наглядно демонстрирует структуру кредита. Основной риск для заемщика кроется в первых месяцах: 
-                именно тогда переплата по процентам максимальна. Использование Python позволяет внедрить такие расчеты в любые финансовые системы.
-            </p>
         </section>
 
     </div>
 
     <footer>
-        <div style="font-size: 1.4rem; font-weight: 800;">Махаматсалиев Жангазы</div>
-        <p style="opacity: 0.6; font-size: 0.9rem;">Группа ИСТ-2-22 | Отчет по программированию</p>
-        <a href="index.html" class="btn-home">ВЕРНУТЬСЯ В ПОРТФОЛИО</a>
+        <div style="font-weight: 800; font-size: 1.2rem;">Махаматсалиев Жангазы</div>
+        <p style="opacity: 0.6; font-size: 0.8rem;">Кыргызстан, 2024</p>
+        <a href="index.html" class="btn-exit">ВЕРНУТЬСЯ НА ГЛАВНУЮ</a>
     </footer>
 
     <script>
         let myChart;
 
-        function update() {
+        function run() {
             const p = parseFloat(document.getElementById('p').value) || 0;
-            const annualRate = parseFloat(document.getElementById('r').value) || 0;
+            const rate = parseFloat(document.getElementById('r').value) || 0;
             const years = parseFloat(document.getElementById('t').value) || 0;
 
-            const r = annualRate / 100 / 12;
+            const r = rate / 100 / 12;
             const n = years * 12;
 
             let payment = 0;
@@ -299,67 +319,59 @@ print(f"Платеж: {calculate_annuity(500000, 22, 3)} KGS")
                 payment = p / n;
             }
 
-            document.getElementById('monthly-payment').innerText = Math.round(payment).toLocaleString() + ' сом';
+            document.getElementById('m-payment').innerText = Math.round(payment).toLocaleString() + ' сом';
 
             let balance = p;
-            let labels = [];
-            let chartData = [];
-            let tableHtml = '';
+            let chartLabels = [];
+            let chartPoints = [];
+            let html = '';
 
             for (let i = 1; i <= n; i++) {
                 let interest = balance * r;
                 let principal = payment - interest;
                 balance -= principal;
 
-                if (i <= 12) { // Заполняем таблицу для 1-го года
-                    tableHtml += `
-                        <tr>
-                            <td>${i}</td>
-                            <td>${Math.round(payment).toLocaleString()}</td>
-                            <td>${Math.round(interest).toLocaleString()}</td>
-                            <td>${Math.round(principal).toLocaleString()}</td>
-                            <td>${Math.max(0, Math.round(balance)).toLocaleString()}</td>
-                        </tr>
-                    `;
+                if (i <= 12) {
+                    html += `<tr>
+                        <td>${i}</td>
+                        <td>${Math.round(payment)}</td>
+                        <td>${Math.round(interest)}</td>
+                        <td>${Math.round(principal)}</td>
+                        <td>${Math.max(0, Math.round(balance))}</td>
+                    </tr>`;
                 }
-
-                if (i % 2 === 0 || i === 1) {
-                    labels.push(i + ' м.');
-                    chartData.push(Math.max(0, Math.round(balance)));
+                
+                if (i % 3 === 0 || i === 1) {
+                    chartLabels.push(i + 'м');
+                    chartPoints.push(Math.max(0, Math.round(balance)));
                 }
             }
+            document.querySelector('#schedule tbody').innerHTML = html;
 
-            document.querySelector('#schedule-table tbody').innerHTML = tableHtml;
-
-            // Обновление графика
             if (myChart) myChart.destroy();
-            const ctx = document.getElementById('loanChart').getContext('2d');
-            myChart = new Chart(ctx, {
+            myChart = new Chart(document.getElementById('loanChart'), {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels: chartLabels,
                     datasets: [{
-                        label: 'Остаток долга',
-                        data: chartData,
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        data: chartPoints,
+                        borderColor: '#fbbf24',
+                        backgroundColor: 'rgba(251, 191, 36, 0.1)',
                         fill: true,
-                        tension: 0.4
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointRadius: 0
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
-                    scales: { 
-                        y: { display: false },
-                        x: { ticks: { font: { size: 10 } } }
-                    }
+                    scales: { y: { display: false }, x: { ticks: { font: { size: 9 } } } }
                 }
             });
         }
-
-        window.onload = update;
+        window.onload = run;
     </script>
 </body>
 </html>
