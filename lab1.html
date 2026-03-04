@@ -3,124 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Лабораторная №1 | Махаматсалиев Жангазы</title>
+    <title>Лаб №1 | Проценты | Жангазы</title>
     
+    <!-- Библиотеки -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Fira+Code&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --primary: #0066ff;
-            --dark: #0a0a0b;
-            --accent: #00d169;
-            --bg: #ffffff;
-            --card-bg: #f4f7fa;
+        /* 1. ГЛОБАЛЬНЫЕ СТИЛИ (ЗАЩИТА ОТ ВЫПИРАНИЯ) */
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
         }
 
-        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
-
-        body {
-            font-family: 'Manrope', sans-serif;
-            color: var(--dark);
-            line-height: 1.6;
+        html, body {
+            overflow-x: hidden; /* Важно: запрещаем боковой скролл */
+            width: 100%;
             margin: 0;
-            background-color: var(--bg);
-            -webkit-font-smoothing: antialiased;
+            padding: 0;
+            background-color: #f1f5f9;
+            font-family: 'Manrope', sans-serif;
+            color: #0f172a;
         }
 
-        /* Навигация (Адаптивная кнопка) */
+        /* 2. НАВИГАЦИЯ */
         .header-nav {
             position: sticky;
             top: 0;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            padding: 12px 20px;
+            padding: 12px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #e2e8f0;
             z-index: 1000;
         }
 
-        .exit-link {
+        .header-nav a {
             text-decoration: none;
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            color: #2563eb;
+            font-weight: 800;
+            font-size: 0.85rem;
         }
 
-        /* Обложка (Hero) */
+        /* 3. КОНТЕЙНЕРЫ */
         .hero {
-            padding: 60px 20px;
+            padding: 50px 20px;
             text-align: center;
-            background: radial-gradient(circle at top right, #f0f7ff, #ffffff);
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .hero h1 {
-            font-size: clamp(1.8rem, 8vw, 3.5rem);
-            line-height: 1.1;
-            margin-bottom: 20px;
-            font-weight: 800;
+            font-size: clamp(1.6rem, 7vw, 2.5rem);
+            margin: 10px 0;
+            line-height: 1.2;
+            color: #1e293b;
         }
 
-        .hero p {
-            font-size: clamp(1rem, 4vw, 1.25rem);
-            color: #4b5563;
-            max-width: 700px;
+        .container {
+            width: 100%;
+            max-width: 900px;
             margin: 0 auto;
+            padding: 20px 15px; /* Узкие отступы для мобильных */
         }
 
-        .badge {
-            display: inline-block;
-            background: #e0f0ff;
-            color: var(--primary);
-            padding: 4px 12px;
-            border-radius: 100px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        /* Секции */
-        .content-section {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .content-section h2 {
-            font-size: clamp(1.4rem, 5vw, 2rem);
-            margin-bottom: 20px;
-            border-left: 4px solid var(--primary);
-            padding-left: 15px;
-        }
-
-        .thought-card {
-            background: var(--card-bg);
+        .card {
+            background: #ffffff;
             padding: 25px;
             border-radius: 20px;
-            margin: 30px 0;
-            position: relative;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            width: 100%;
+            overflow: hidden; /* Защита внутренних элементов */
         }
 
-        /* Код (адаптивный) */
+        /* 4. ОФОРМЛЕНИЕ КОДА И ФОРМУЛ (С АДАПТАЦИЕЙ) */
+        .math-box {
+            width: 100%;
+            overflow-x: auto; /* Скролл если формула не влезла */
+            padding: 15px 0;
+            margin: 10px 0;
+            text-align: center;
+        }
+
         .code-window {
             background: #1e1e1e;
-            padding: 20px;
+            padding: 18px;
             border-radius: 15px;
-            overflow-x: auto;
             margin: 20px 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            border: 1px solid #334155;
         }
-        pre { font-family: 'Fira Code', monospace; color: #d4d4d4; font-size: 13px; margin: 0; }
 
-        /* Интерактивный дашборд (Mobile First) */
+        pre {
+            font-family: 'Fira Code', monospace;
+            color: #d4d4d4;
+            font-size: 13px;
+            margin: 0;
+            white-space: pre-wrap; /* ПЕРЕНОС СТРОК (чтобы не выпирало) */
+            word-break: break-all;
+        }
+
+        /* 5. КАЛЬКУЛЯТОР-ДАШБОРД */
         .dashboard {
-            background: var(--dark);
+            background: #0f172a;
             color: white;
             padding: 25px;
             border-radius: 24px;
@@ -129,25 +118,33 @@
 
         .dash-grid {
             display: grid;
-            grid-template-columns: 1fr; /* По умолчанию в один ряд для мобилок */
-            gap: 25px;
+            grid-template-columns: 1fr; /* По умолчанию 1 колонка */
+            gap: 30px;
         }
 
-        @min-width 768px {
-            .dash-grid { grid-template-columns: 1fr 1fr; }
+        @media (min-width: 768px) {
+            .dash-grid { grid-template-columns: 1fr 1.5fr; } /* 2 колонки на ПК */
+            .container { padding: 40px 20px; }
         }
 
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-size: 0.8rem; margin-bottom: 8px; opacity: 0.7; }
-        .input-group input {
+        .inputs label {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+            opacity: 0.7;
+        }
+
+        .inputs input {
             width: 100%;
             padding: 14px;
             border-radius: 12px;
             border: none;
-            background: #232326;
+            background: #1e293b;
             color: white;
             font-size: 1.1rem;
+            margin-bottom: 20px;
             outline: none;
+            border: 1px solid #334155;
         }
 
         .res-display {
@@ -156,17 +153,22 @@
             border-radius: 16px;
             text-align: center;
         }
-        .res-display strong { font-size: 1.8rem; color: var(--accent); display: block; }
 
-        .chart-container {
+        .res-display strong {
+            font-size: 1.8rem;
+            color: #10b981;
+            display: block;
+        }
+
+        .chart-wrap {
             background: white;
             padding: 15px;
-            border-radius: 16px;
-            height: 250px;
+            border-radius: 18px;
+            height: 300px;
             width: 100%;
         }
 
-        /* Футер */
+        /* 6. ФУТЕР */
         footer {
             background: #000;
             color: white;
@@ -174,9 +176,9 @@
             text-align: center;
         }
 
-        .btn-main {
+        .btn-exit {
             display: inline-block;
-            background: var(--primary);
+            background: #2563eb;
             color: white;
             padding: 16px 32px;
             border-radius: 100px;
@@ -184,148 +186,157 @@
             font-weight: 700;
             margin-top: 30px;
             width: 100%;
-            max-width: 300px;
+            max-width: 280px;
         }
-
-        /* Для MathJax на мобильных */
-        .mjx-chtml { font-size: 90% !important; overflow-x: auto; }
     </style>
 </head>
 <body>
 
     <nav class="header-nav">
-        <a href="index.html" class="exit-link">← На главную</a>
-        <div style="font-size: 0.8rem; font-weight: 700;">ЛАБ №1</div>
+        <a href="index.html">← В ПОРТФОЛИО</a>
+        <div style="font-weight: 800; font-size: 0.75rem; color: #64748b;">ЛАБОРАТОРНАЯ №1</div>
     </nav>
 
     <header class="hero">
-        <span class="badge">Программирование расчета простых и сложных процентов</span>
-        <h1>Магия процентов в коде.</h1>
-        <p>Я, Махаматсалиев Жангазы, представляю расчетную модель банковских вкладов, адаптированную под условия Кыргызстана.</p>
+        <div style="background:#dcfce7; color:#166534; display:inline-block; padding:4px 12px; border-radius:50px; font-size:0.75rem; font-weight:800; margin-bottom:15px;">PYTHON & FINANCE</div>
+        <h1>Анализ процентных ставок</h1>
+        <p>Махаматсалиев Жангазы | ИСТ-2-22</p>
     </header>
 
-    <main class="content-section">
-        <h2>В чем суть?</h2>
-        <p>
-            В Кыргызстане банковский сектор активно развивается, и многие до сих пор считают доходность вкладов "на глаз" или через Excel. 
-            Но когда мы говорим о реальных финансах, нужна точность Python. 
-        </p>
+    <div class="container">
         
-        <div class="thought-card">
-            <strong>Моё мнение:</strong> Код позволяет автоматизировать процесс. Представьте, что банк меняет условия капитализации тысячи вкладов за секунду. 
-            Руками это сделать невозможно, а мой алгоритм справится за миллисекунды.
-        </div>
+        <section class="card" style="border-left: 5px solid #2563eb;">
+            <h2 style="margin-top: 0;">Почему это важно?</h2>
+            <p>Для финансового сектора Кыргызстана расчет доходности — это база. Я реализовал программу, которая сравнивает два типа начисления процентов. В Excel это просто таблица, а в моем коде — это масштабируемый алгоритм.</p>
+        </section>
 
-        <h2>Математическая база</h2>
-        <p>Для вкладов в сомах (KGS) чаще всего используется капитализация. Формула экспоненциального роста:</p>
-        <div style="overflow-x: auto; margin: 20px 0;">
-            \[S = P \left(1 + \frac{i}{m}\right)^{m \cdot n}\]
-        </div>
+        <section class="card">
+            <h2>Математическая модель</h2>
+            <p>Сложные проценты (капитализация) — это двигатель современного банковского дела:</p>
+            <div class="math-box">
+                \[S = P \left(1 + \frac{i}{m}\right)^{m \cdot n}\]
+            </div>
+            <p style="font-size: 0.8rem; color: #64748b;">Здесь: P — сумма в сомах, i — годовая ставка, m — частота капитализации.</p>
+        </section>
 
-        <h2>Программа на Python</h2>
-        <p>Этот код — ядро моих расчетов. Он учитывает периоды начисления и время:</p>
-        <div class="code-window">
+        <section class="card">
+            <h2>Код на Python</h2>
+            <div class="code-window">
 <pre>
-def get_bank_profit(p, r, t, m=12):
-    # p - сумма в сомах, r - ставка %, t - годы
-    # m=12 (ежемесячная капитализация)
-    rate = r / 100
-    return round(p * (1 + rate/m)**(m*t), 2)
+def calc_profit(p, r, t, m=12):
+    # p - начальный капитал (сом)
+    # r - ставка в процентах
+    # t - срок в годах
+    decimal_rate = r / 100
+    # Формула сложных процентов
+    result = p * (1 + decimal_rate/m)**(m*t)
+    return round(result, 2)
 
-# Пример: 100,000 сом под 15% на 5 лет
-print(get_bank_profit(100000, 15, 5))
+print(f"Итог: {calc_profit(100000, 16, 5)} KGS")
 </pre>
-        </div>
+            </div>
+        </section>
 
-        <h2>Живой симулятор (KGS)</h2>
-        <p>Я перенес логику Python прямо в этот интерфейс. Попробуйте сами изменить цифры:</p>
-
-        <div class="dashboard">
+        <!-- КАЛЬКУЛЯТОР -->
+        <section class="dashboard">
+            <h2 style="color:white; margin-top:0;">Симулятор прибыли (KGS)</h2>
             <div class="dash-grid">
-                <div class="controls">
-                    <div class="input-group">
-                        <label>Сумма в сомах (KGS)</label>
-                        <input type="number" id="p" value="100000" oninput="run()">
-                    </div>
-                    <div class="input-group">
-                        <label>Ставка в год (%)</label>
-                        <input type="number" id="r" value="16" oninput="run()">
-                    </div>
-                    <div class="input-group">
-                        <label>Срок (лет)</label>
-                        <input type="number" id="t" value="5" oninput="run()">
-                    </div>
+                <div class="inputs">
+                    <label>Начальный капитал (сом)</label>
+                    <input type="number" id="p" value="100000" oninput="update()">
+                    
+                    <label>Годовая ставка (%)</label>
+                    <input type="number" id="r" value="16" oninput="update()">
+                    
+                    <label>Срок в годах</label>
+                    <input type="number" id="t" value="10" oninput="update()">
+
                     <div class="res-display">
-                        <small>Итого через <span id="y-label">5</span> л.:</small>
-                        <strong id="final-res">221 034 сом</strong>
+                        <small>Итоговая сумма через <span id="y-val">10</span> л.:</small>
+                        <strong id="final-res">480 102 сом</strong>
                     </div>
                 </div>
-                <div class="chart-container">
-                    <canvas id="chart"></canvas>
+                <div class="chart-wrap">
+                    <canvas id="mainChart"></canvas>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <h2>Заключение</h2>
-        <p>
-            Программирование — это мощный инструмент для экономиста. Расчеты показывают, что в условиях инфляции 
-            сложный процент в сомах — это один из немногих способов не просто сохранить, но и преумножить капитал.
-        </p>
-    </main>
+        <section class="card">
+            <h2>Выводы</h2>
+            <p>Моделирование показало, что на длительном горизонте (от 5 лет) вклады в сомах с капитализацией значительно обходят простые проценты. Программирование позволяет визуализировать эту разницу мгновенно.</p>
+        </section>
+
+    </div>
 
     <footer>
-        <div style="font-size: 1.2rem; font-weight: 800; margin-bottom: 10px;">Махаматсалиев Жангазы</div>
-        <p style="opacity: 0.6; font-size: 0.9rem;">ИСТ-2-22 | Кыргызстан, 2026</p>
-        <a href="index.html" class="btn-main">ВЕРНУТЬСЯ В МЕНЮ</a>
+        <div style="font-weight: 800; font-size: 1.25rem;">Махаматсалиев Жангазы</div>
+        <p style="opacity: 0.6; font-size: 0.85rem;">Кыргызстан, 2024 | Отчет по дисциплине</p>
+        <a href="index.html" class="btn-exit">ВЕРНУТЬСЯ В ПОРТФОЛИО</a>
     </footer>
 
     <script>
         let myChart;
-        function run() {
+
+        function update() {
             const p = parseFloat(document.getElementById('p').value) || 0;
             const r = parseFloat(document.getElementById('r').value) || 0;
             const t = parseInt(document.getElementById('t').value) || 0;
             
-            document.getElementById('y-label').innerText = t;
+            document.getElementById('y-val').innerText = t;
 
             let years = [];
-            let data = [];
-            for(let i=0; i<=t; i++) {
+            let simpleData = [];
+            let compoundData = [];
+
+            for (let i = 0; i <= t; i++) {
                 years.push(i + 'г');
-                data.push(Math.round(p * Math.pow((1 + (r/100)/12), (12 * i))));
+                simpleData.push(p * (1 + (r/100) * i));
+                compoundData.push(Math.round(p * Math.pow((1 + (r/100)/12), (12 * i))));
             }
 
-            document.getElementById('final-res').innerText = data[data.length-1].toLocaleString() + ' сом';
+            document.getElementById('final-res').innerText = compoundData[compoundData.length - 1].toLocaleString() + ' сом';
 
-            if(myChart) myChart.destroy();
-            const ctx = document.getElementById('chart').getContext('2d');
+            if (myChart) myChart.destroy();
+            const ctx = document.getElementById('mainChart').getContext('2d');
             myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: years,
-                    datasets: [{
-                        label: 'Баланс (сом)',
-                        data: data,
-                        borderColor: '#00d169',
-                        backgroundColor: 'rgba(0, 209, 105, 0.1)',
-                        fill: true,
-                        tension: 0.4,
-                        borderWidth: 3,
-                        pointRadius: 0
-                    }]
+                    datasets: [
+                        {
+                            label: 'Сложный %',
+                            data: compoundData,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Простой %',
+                            data: simpleData,
+                            borderColor: '#ef4444',
+                            borderDash: [5, 5],
+                            fill: false,
+                            pointRadius: 0
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: { 
-                        x: { grid: { display: false }, ticks: { font: { size: 10 } } },
-                        y: { display: false }
+                        y: { display: false },
+                        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
                     }
                 }
             });
         }
-        window.onload = run;
+
+        window.onload = update;
     </script>
 </body>
 </html>
